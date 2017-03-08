@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import seq2seq
+from lib.callbacks import ParaphraseCallback
 from seq2seq.models import Seq2Seq
 
 # Data loading imports
@@ -11,7 +12,6 @@ GLOVE_SIZE = 50
 HIDDEN_SIZE = 100
 HIDDEN_DEPTH = 12
 MAX_SENTENCE_LENGTH = 51
-
 
 # Load the data and build the vocab
 loader = MicrosoftDataloader()
@@ -26,10 +26,13 @@ test_labels, test_inputs = parser.get_embeddings(test,MAX_SENTENCE_LENGTH)
 dev_labels, dev_inputs = parser.get_embeddings(dev,MAX_SENTENCE_LENGTH)
 
 # Use each item of the paraphrase pairs when training the autoencoder
-# The target size is (n_training, max_senstence_length, embedding_size)
+# The target size is (n_training, max_sentence_length, embedding_size)
 print "Reshaping training data"
 X_train = np.reshape(train_inputs,(-1,MAX_SENTENCE_LENGTH,GLOVE_SIZE))
 X_test = np.reshape(test_inputs,(-1,MAX_SENTENCE_LENGTH,GLOVE_SIZE))
+
+# Build the Siamese network callback
+siamese = ParaphraseCallback(train_inputs, train_labels, test_inputs, test_labels)
 
 # Train the autoencoder
 print "Building Seq2Seq model"
@@ -45,8 +48,7 @@ print "Compiling Seq2Seq model"
 autoencoder.compile(loss='mse', optimizer='rmsprop')
 
 print "Fitting Seq2Seq model"
-autoencoder.fit(X_train, X_train, nb_epoch=500, batch_size=128)
-
+autoencoder.fit(X_train, X_train, nb_epoch=10, batch_size=128, callbacks=[siamese])
 
 print "Evaluating on training set"
 autoencoder.evaluate(X_train, X_train, batch_size=128)
