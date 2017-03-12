@@ -29,7 +29,7 @@ def contrastive_loss(y, d):
 def compute_accuracy(predictions, labels):
     """ Compute classification accuracy with a fixed threshold on distances.
     """
-    yhat = predictions < 0.2
+    yhat = predictions < 0.5
     accuracy = (yhat==labels)
     print 'labels',labels
     print 'pred',predictions
@@ -42,7 +42,7 @@ def compute_accuracy(predictions, labels):
 class SiameseParaphrase():
     """Simple feedforward paraphrase classification model"""
 
-    def __init__(self, autoencoder,input_dimension):
+    def __init__(self, autoencoder, input_dimension):
 
         # Get the inputs to the autoencoder
         inputLeft = autoencoder.inputs[0]
@@ -69,7 +69,7 @@ class SiameseParaphrase():
     def fit(self,train_left,train_right,labels):
         """Fit the model to the data"""
         print "Fitting Paraphrase <SiameseParaphrase> model: "
-        self.model.fit([train_left, train_right], labels, batch_size=128, nb_epoch=1)
+        self.model.fit([train_left, train_right], labels, batch_size=128, nb_epoch=10)
 
     def evaluate(self, x_left, x_right, labels):
         # compute final accuracy on training and test sets

@@ -48,6 +48,11 @@ autoencoder = Seq2Seq(
 	depth=HIDDEN_DEPTH
 )
 
+siamese.model = autoencoder
+for i in range(10):
+	siamese.on_batch_end(None,None)
+
+"""
 print "Compiling RNN Autoencoder <Seq2Seq> model"
 optimizer = Adam(lr=0.005)
 autoencoder.compile(loss='mse', optimizer=optimizer,loss_weights=[1., 1.])
@@ -62,4 +67,4 @@ for i in range(10):
 
 	print "Evaluating RNN Autoencoder <Seq2Seq> on test set"
 	print autoencoder.evaluate([X_test,X_test], [X_test,X_test], batch_size=128)
-
+"""
