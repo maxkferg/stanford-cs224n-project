@@ -48,19 +48,11 @@ print "Compiling Seq2Seq model"
 autoencoder.compile(loss='mse', optimizer='rmsprop')
 
 print "Fitting Seq2Seq model"
-autoencoder.fit(X_train, X_train, nb_epoch=10, batch_size=128, callbacks=[siamese])
+autoencoder.fit([X_train,X_train], [X_train,X_train], nb_epoch=10, batch_size=128, callbacks=[siamese])
 
 print "Evaluating on training set"
-autoencoder.evaluate(X_train, X_train, batch_size=128)
+autoencoder.evaluate([X_train,X_train], [X_train,X_train], batch_size=128)
 
 print "Evaluating on test set"
-autoencoder.evaluate(X_test, X_test, batch_size=128)
+autoencoder.evaluate([X_test,X_test], [X_test,X_test], batch_size=128)
 
-
-#print 'MIDPOINT:'
-#print model.midpoint.predict(X_train,batch_size=20)
-#print 'END'
-
-
-
-#print model.predict(X_train,batch_size=20)

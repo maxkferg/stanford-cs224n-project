@@ -1,8 +1,10 @@
 import random
 import numpy as np
+from keras.models import Model
 from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers.core import *
+from keras.layers import Input,merge
 from keras.optimizers import SGD, RMSprop
 from keras import backend as K
 
@@ -56,27 +58,27 @@ class SiameseParaphrase():
     """Simple feedforward paraphrase classification model"""
 
     def __init__(self, autoencoder,input_dimension):
-        # network definition
-        # create a Sequential for each element of the pairs
-        input1 = Sequential()
-        input2 = Sequential()
-        input1.add(Layer(input_shape=input_dimension,name="left_input"))
-        input2.add(Layer(input_shape=input_dimension,name="right_input"))
 
-        # share the encoder network with both inputs
-        #base_network = autoencoder.midpoint
-        #add_shared_layer(base_network, [input1, input2])
+        # Get the inputs to the autoencoder
+        inputLeft = autoencoder.inputs[0]
+        inputRight = autoencoder.inputs[1]
+
+        # Get the outputs from the autoencoder
+        print autoencoder.midpoints
+        outputLeft = autoencoder.midpoints[0]
+        outputRight = autoencoder.midpoints[1]
 
         # merge outputs of the base network and compute euclidean distance
-        lambda_merge = Merge([input1, input2], mode=euclidean_distance, output_shape=[[None,1]])
+        lambda_merge = merge([outputLeft, outputRight], mode=euclidean_distance, output_shape=[[None,1]])
 
         # create main network
-        model = Sequential()
-        model.add(lambda_merge)
+        #model = Sequential()
+        #model.add(lambda_merge)
+        model = Model([inputLeft,inputRight],lambda_merge)
 
         # compile
         rms = RMSprop()
-        model.compile(loss=contrastive_loss, optimizer=rms)
+        model.compile(loss=contrastive_loss, optimizer=rms, loss_weights=[1., 1.])
 
         # display
         print model.summary()

@@ -27,4 +27,4 @@ class ParaphraseCallback(keras.callbacks.Callback):
         siamese.evaluate(self.train_left, self.train_right, self.train_labels)
 
         print "Evaluating SiameseModel in testing data:"
-        siamese.evaluate(self.train_left, self.test_right, self.test_labels)
+        siamese.evaluate(self.test_left, self.test_right, self.test_labels)
