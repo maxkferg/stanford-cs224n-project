@@ -71,7 +71,7 @@ class DataParser(object):
 			for j,sentence in enumerate([sentence1,sentence2]):
 				for k,word in enumerate(sentence):
 					if k>=max_length:
-						print "Ignoring word %i"%k
+						#print "Ignoring word %i"%k
 						continue
 					inputs[i,k,j] = self.word_to_onehot(word)
 		return labels,inputs
