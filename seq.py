@@ -45,7 +45,8 @@ autoencoder = Seq2Seq(
 	hidden_dim=HIDDEN_SIZE,
 	output_length=MAX_SENTENCE_LENGTH,
 	output_dim=GLOVE_SIZE,
-	depth=HIDDEN_DEPTH
+	depth=HIDDEN_DEPTH,
+	dropout=0.5
 )
 
 siamese.model = autoencoder
