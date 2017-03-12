@@ -65,7 +65,7 @@ class SiameseParaphrase():
     def fit(self,train_left,train_right,labels):
         """Fit the model to the data"""
         print "Fitting Paraphrase <SiameseParaphrase> model: "
-        self.model.fit([train_left, train_right], labels, batch_size=128, nb_epoch=2)
+        self.model.fit([train_left, train_right], labels, batch_size=128, nb_epoch=4)
 
     def predict(self,x_left,x_right,threshold=0.5):
         """Predict the output labels (binary)"""
@@ -75,17 +75,15 @@ class SiameseParaphrase():
 
     def evaluate(self, x_left, x_right, labels):
         # compute final accuracy on training and test sets
-        yhat3 = self.predict(x_left, x_right, 0.4)
-        yhat5 = self.predict(x_left, x_right, 0.5)
-        yhat7 = self.predict(x_left, x_right, 0.6)
-        p,r,f,_ = precision_recall_fscore_support(labels, yhat5, average='binary')
-        print('* Accuracy (0.4): %0.2f%%' % (100 * compute_accuracy(yhat3, labels)))
-        print('* Accuracy (0.5): %0.2f%%' % (100 * compute_accuracy(yhat5, labels)))
-        print('* Accuracy (0.6): %0.2f%%' % (100 * compute_accuracy(yhat7, labels)))
+        yhat = self.predict(x_left, x_right, 0.5)
+        p,r,f,_ = precision_recall_fscore_support(labels, yhat, average='binary')
+        print('* Accuracy (0.4): %0.2f%%' % (100 * compute_accuracy(yhat, labels)))
+        print('* Accuracy (0.5): %0.2f%%' % (100 * compute_accuracy(yhat, labels)))
+        print('* Accuracy (0.6): %0.2f%%' % (100 * compute_accuracy(yhat, labels)))
         # Show the confusion matrix and precision/recall
-        p,r,f,_ = precision_recall_fscore_support(labels, yhat5, average='binary')
+        p,r,f,_ = precision_recall_fscore_support(labels, yhat, average='binary')
         print "Precision={:.2f}, Recall={:.2f}, F1={:.2f}".format(p,r,f)
-        print confusion_matrix(labels, yhat5)
+        print confusion_matrix(labels, yhat)
 
 
 
