@@ -65,15 +65,16 @@ class SiameseParaphrase():
     def fit(self,train_left,train_right,labels):
         """Fit the model to the data"""
         print "Fitting Paraphrase <SiameseParaphrase> model: "
-        self.model.fit([train_left, train_right], labels, batch_size=128, nb_epoch=10)
+        self.model.fit([train_left, train_right], labels, batch_size=128, nb_epoch=4)
 
     def evaluate(self, x_left, x_right, labels):
         # compute final accuracy on training and test sets
         pred = self.model.predict([x_left, x_right])
-        accuracy = compute_accuracy(pred, labels)
-        print('* Accuracy (0.4): %0.2f%%' % (100 * accuracy), 0.4)
-        print('* Accuracy (0.5): %0.2f%%' % (100 * accuracy), 0.5)
-        print('* Accuracy (0.6): %0.2f%%' % (100 * accuracy), 0.6)
+        print pred.shape
+        p,r,f,_ = precision_recall_fscore_support(labels, pred, average='binary')
+        print('* Accuracy (0.4): %0.2f%%' % (100 * compute_accuracy(pred, labels, 0.4)))
+        print('* Accuracy (0.5): %0.2f%%' % (100 * compute_accuracy(pred, labels, 0.5)))
+        print('* Accuracy (0.6): %0.2f%%' % (100 * compute_accuracy(pred, labels, 0.6)))
 
 
 
