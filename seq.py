@@ -55,11 +55,11 @@ autoencoder.compile(loss='mse', optimizer=optimizer,loss_weights=[1., 1.])
 for i in range(10):
 	print "------------- Attempt %i --------------"%i
 	print "Fitting RNN Autoencoder <Seq2Seq> model"
-	autoencoder.fit([X_train,X_train], [X_train,X_train], nb_epoch=1, batch_size=512, callbacks=[siamese])
+	autoencoder.fit([X_train,X_train], [X_train,X_train], nb_epoch=1, batch_size=256, callbacks=[siamese])
 
 	print "Evaluating RNN Autoencoder <Seq2Seq> on training set"
-	print autoencoder.evaluate([X_train,X_train], [X_train,X_train], batch_size=512)
+	print autoencoder.evaluate([X_train,X_train], [X_train,X_train], batch_size=256)
 
 	print "Evaluating RNN Autoencoder <Seq2Seq> on test set"
-	print autoencoder.evaluate([X_test,X_test], [X_test,X_test], batch_size=512)
+	print autoencoder.evaluate([X_test,X_test], [X_test,X_test], batch_size=256)
 
