@@ -75,13 +75,13 @@ class SiameseParaphrase():
 
     def evaluate(self, x_left, x_right, labels):
         # compute final accuracy on training and test sets
-        yhat3 = self.predict([x_left, x_right])
-        yhat5 = self.predict([x_left, x_right])
-        yhat7 = self.predict([x_left, x_right])
+        yhat3 = self.predict(x_left, x_right, 0.4)
+        yhat5 = self.predict(x_left, x_right, 0.5)
+        yhat7 = self.predict(x_left, x_right, 0.6)
         p,r,f,_ = precision_recall_fscore_support(labels, yhat5, average='binary')
-        print('* Accuracy (0.4): %0.2f%%' % (100 * compute_accuracy(yhat3, labels, 0.4)))
-        print('* Accuracy (0.5): %0.2f%%' % (100 * compute_accuracy(yhat5, labels, 0.5)))
-        print('* Accuracy (0.6): %0.2f%%' % (100 * compute_accuracy(yhat7, labels, 0.6)))
+        print('* Accuracy (0.4): %0.2f%%' % (100 * compute_accuracy(yhat3, labels)))
+        print('* Accuracy (0.5): %0.2f%%' % (100 * compute_accuracy(yhat5, labels)))
+        print('* Accuracy (0.6): %0.2f%%' % (100 * compute_accuracy(yhat7, labels)))
         # Show the confusion matrix and precision/recall
         p,r,f,_ = precision_recall_fscore_support(labels, yhat5, average='binary')
         print "Precision={:.2f}, Recall={:.2f}, F1={:.2f}".format(p,r,f)
