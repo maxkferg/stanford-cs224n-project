@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import seq2seq
+from keras.optimizers import Adam
 from lib.callbacks import ParaphraseCallback
 from seq2seq.models import Seq2Seq
 
@@ -9,9 +10,9 @@ from data.loaders import MicrosoftDataloader
 from data.parsers import DataParser
 
 GLOVE_SIZE = 50
-HIDDEN_SIZE = 100
-HIDDEN_DEPTH = 12
-MAX_SENTENCE_LENGTH = 51
+HIDDEN_SIZE = 40
+HIDDEN_DEPTH = 2
+MAX_SENTENCE_LENGTH = 20
 
 # Load the data and build the vocab
 loader = MicrosoftDataloader()
@@ -47,16 +48,17 @@ autoencoder = Seq2Seq(
 )
 
 print "Compiling RNN Autoencoder <Seq2Seq> model"
-autoencoder.compile(loss='mse', optimizer='rmsprop',loss_weights=[1., 1.])
+optimizer = Adam(lr=0.005)
+autoencoder.compile(loss='mse', optimizer=optimizer,loss_weights=[1., 1.])
 
 for i in range(10):
 	print "------------- Attempt %i --------------"%i
 	print "Fitting RNN Autoencoder <Seq2Seq> model"
-	autoencoder.fit([X_train,X_train], [X_train,X_train], nb_epoch=4, batch_size=128)#, callbacks=[siamese])
+	autoencoder.fit([X_train,X_train], [X_train,X_train], nb_epoch=1, batch_size=512, callbacks=[siamese])
 
 	print "Evaluating RNN Autoencoder <Seq2Seq> on training set"
-	autoencoder.evaluate([X_train,X_train], [X_train,X_train], batch_size=128)
+	print autoencoder.evaluate([X_train,X_train], [X_train,X_train], batch_size=512)
 
 	print "Evaluating RNN Autoencoder <Seq2Seq> on test set"
-	autoencoder.evaluate([X_test,X_test], [X_test,X_test], batch_size=128)
+	print autoencoder.evaluate([X_test,X_test], [X_test,X_test], batch_size=512)
 
