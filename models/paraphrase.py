@@ -7,6 +7,7 @@ from keras.layers.core import *
 from keras.layers import Input,merge
 from keras.optimizers import SGD, RMSprop
 from keras import backend as K
+from sklearn.metrics import precision_recall_fscore_support,confusion_matrix
 
 
 def euclidean_distance(inputs):
@@ -29,7 +30,6 @@ def contrastive_loss(y, d):
 def compute_accuracy(predictions, labels, threshold=0.5):
     """ Compute classification accuracy with a fixed threshold on distances.
     """
-    yhat = predictions < threshold
     accuracy = (yhat==labels)
     return accuracy.mean()
 
@@ -67,14 +67,25 @@ class SiameseParaphrase():
         print "Fitting Paraphrase <SiameseParaphrase> model: "
         self.model.fit([train_left, train_right], labels, batch_size=128, nb_epoch=4)
 
+    def predict(x_left,x_right,threshold=0.5):
+        """Predict the output labels (binary)"""
+        scores = self.model.predict([x_left, x_right])
+        yhat = scores < threshold # With L2 a low score -> matching sentence
+        return yhat
+
     def evaluate(self, x_left, x_right, labels):
         # compute final accuracy on training and test sets
-        pred = self.model.predict([x_left, x_right])
-        print pred.shape
-        p,r,f,_ = precision_recall_fscore_support(labels, pred, average='binary')
-        print('* Accuracy (0.4): %0.2f%%' % (100 * compute_accuracy(pred, labels, 0.4)))
-        print('* Accuracy (0.5): %0.2f%%' % (100 * compute_accuracy(pred, labels, 0.5)))
-        print('* Accuracy (0.6): %0.2f%%' % (100 * compute_accuracy(pred, labels, 0.6)))
+        yhat3 = self.predict([x_left, x_right])
+        yhat5 = self.predict([x_left, x_right])
+        yhat7 = self.predict([x_left, x_right])
+        p,r,f,_ = precision_recall_fscore_support(labels, yhat5, average='binary')
+        print('* Accuracy (0.4): %0.2f%%' % (100 * compute_accuracy(yhat3, labels, 0.4)))
+        print('* Accuracy (0.5): %0.2f%%' % (100 * compute_accuracy(yhat5, labels, 0.5)))
+        print('* Accuracy (0.6): %0.2f%%' % (100 * compute_accuracy(yhat7, labels, 0.6)))
+        # Show the confusion matrix and precision/recall
+        p,r,f,_ = precision_recall_fscore_support(labels, yhat5, average='binary')
+        print "Precision={:.2f}, Recall={:.2f}, F1={:.2f}".format(p,r,f)
+        print confusion_matrix(labels, yhat5)
 
 
 
