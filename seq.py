@@ -33,7 +33,8 @@ X_train = np.reshape(train_inputs,(-1,MAX_SENTENCE_LENGTH,GLOVE_SIZE))
 X_test = np.reshape(test_inputs,(-1,MAX_SENTENCE_LENGTH,GLOVE_SIZE))
 
 # Build the Siamese network callback
-siamese = ParaphraseCallback(train_inputs, train_labels, test_inputs, test_labels)
+input_shape = (MAX_SENTENCE_LENGTH, GLOVE_SIZE)
+siamese = ParaphraseCallback(train_inputs, train_labels, test_inputs, test_labels, input_shape)
 
 # Train the autoencoder
 # The autoencoder has two input-output columns so it can be used to
