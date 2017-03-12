@@ -10,9 +10,9 @@ from data.loaders import MicrosoftDataloader
 from data.parsers import DataParser
 
 GLOVE_SIZE = 50
-HIDDEN_SIZE = 40
-HIDDEN_DEPTH = 2
-MAX_SENTENCE_LENGTH = 20
+HIDDEN_SIZE = 100
+HIDDEN_DEPTH = 4
+MAX_SENTENCE_LENGTH = 52
 
 # Load the data and build the vocab
 loader = MicrosoftDataloader()

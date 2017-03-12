@@ -26,15 +26,11 @@ def contrastive_loss(y, d):
     return K.mean(y * K.square(d) + (1 - y) * K.square(K.maximum(margin - d, 0)))
 
 
-def compute_accuracy(predictions, labels):
+def compute_accuracy(predictions, labels, threshold=0.5):
     """ Compute classification accuracy with a fixed threshold on distances.
     """
-    yhat = predictions < 0.5
+    yhat = predictions < threshold
     accuracy = (yhat==labels)
-    print 'labels',labels
-    print 'pred',predictions
-    print 'yhat',yhat
-    print 'accuracy',accuracy
     return accuracy.mean()
 
 
@@ -75,7 +71,9 @@ class SiameseParaphrase():
         # compute final accuracy on training and test sets
         pred = self.model.predict([x_left, x_right])
         accuracy = compute_accuracy(pred, labels)
-        print('* Accuracy: %0.2f%%' % (100 * accuracy))
+        print('* Accuracy (0.4): %0.2f%%' % (100 * accuracy), 0.4)
+        print('* Accuracy (0.5): %0.2f%%' % (100 * accuracy), 0.5)
+        print('* Accuracy (0.6): %0.2f%%' % (100 * accuracy), 0.6)
 
 
 
