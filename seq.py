@@ -49,12 +49,14 @@ autoencoder = Seq2Seq(
 print "Compiling RNN Autoencoder <Seq2Seq> model"
 autoencoder.compile(loss='mse', optimizer='rmsprop',loss_weights=[1., 1.])
 
-print "Fitting RNN Autoencoder <Seq2Seq> model"
-autoencoder.fit([X_train,X_train], [X_train,X_train], nb_epoch=10, batch_size=128, callbacks=[siamese])
+for i in range(10):
+	print "------------- Attempt %i --------------"%i
+	print "Fitting RNN Autoencoder <Seq2Seq> model"
+	autoencoder.fit([X_train,X_train], [X_train,X_train], nb_epoch=4, batch_size=128)#, callbacks=[siamese])
 
-print "Evaluating RNN Autoencoder <Seq2Seq> on training set"
-autoencoder.evaluate([X_train,X_train], [X_train,X_train], batch_size=128)
+	print "Evaluating RNN Autoencoder <Seq2Seq> on training set"
+	autoencoder.evaluate([X_train,X_train], [X_train,X_train], batch_size=128)
 
-print "Evaluating RNN Autoencoder <Seq2Seq> on test set"
-autoencoder.evaluate([X_test,X_test], [X_test,X_test], batch_size=128)
+	print "Evaluating RNN Autoencoder <Seq2Seq> on test set"
+	autoencoder.evaluate([X_test,X_test], [X_test,X_test], batch_size=128)
 
