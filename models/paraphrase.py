@@ -27,7 +27,7 @@ def contrastive_loss(y, d):
     return K.mean(y * K.square(d) + (1 - y) * K.square(K.maximum(margin - d, 0)))
 
 
-def compute_accuracy(predictions, labels, threshold=0.5):
+def compute_accuracy(yhat, labels):
     """ Compute classification accuracy with a fixed threshold on distances.
     """
     accuracy = (yhat==labels)
