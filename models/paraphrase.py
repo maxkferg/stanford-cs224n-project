@@ -65,9 +65,9 @@ class SiameseParaphrase():
     def fit(self,train_left,train_right,labels):
         """Fit the model to the data"""
         print "Fitting Paraphrase <SiameseParaphrase> model: "
-        self.model.fit([train_left, train_right], labels, batch_size=128, nb_epoch=4)
+        self.model.fit([train_left, train_right], labels, batch_size=128, nb_epoch=2)
 
-    def predict(x_left,x_right,threshold=0.5):
+    def predict(self,x_left,x_right,threshold=0.5):
         """Predict the output labels (binary)"""
         scores = self.model.predict([x_left, x_right])
         yhat = scores < threshold # With L2 a low score -> matching sentence
