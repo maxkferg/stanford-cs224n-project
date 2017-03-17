@@ -28,11 +28,6 @@ and then start training a model saving checkpoints to --train_dir.
 
 Running with --decode starts an interactive loop so you can see how
 the current checkpoint translates English sentences into French.
-
-See the following papers for more information on neural translation models.
- * http://arxiv.org/abs/1409.3215
- * http://arxiv.org/abs/1409.0473
- * http://arxiv.org/abs/1412.2007
 """
 from __future__ import absolute_import
 from __future__ import division
@@ -120,8 +115,7 @@ def read_data(source_path, target_path, max_size=None):
 
 
 def create_model(session, forward_only, train_dir=None):
-  """
-  Create translation model and initialize or load parameters in session.
+  """Create translation model and initialize or load parameters in session.
   """
   dtype = tf.float16 if FLAGS.use_fp16 else tf.float32
   model = seq2seq_model.Seq2SeqModel(
@@ -147,9 +141,8 @@ def create_model(session, forward_only, train_dir=None):
   return model
 
 
-def comparison_task():
-  """
-  Compare the encoder state for two different English sentences
+def comparison_task(sess,model=None):
+  """Compare the encoder state for two different English sentences
   Cosine similarity is used as the distance metric
   """
   sentences = [
@@ -163,21 +156,25 @@ def comparison_task():
   en_vocab_path = os.path.join(FLAGS.data_dir, "vocab%d.from" % FLAGS.from_vocab_size)
   en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
 
-  with tf.Session() as sess:
-    # Create model and load parameters.
+  # Create model and load parameters.
+  if model==None:
     model = create_model(sess, True)
-    model.batch_size = 1  # We decode one sentence at a time.
 
-    # Get all of the context vectors
-    context_vectors = []
-    for sentence in sentences:
-      context_vector = get_context(sess,model,en_vocab,sentence)
-      context_vectors.append(context_vector)
+  # Persist the original batch size
+  original_batch_size = model.bath_size     
 
-    # Calculate the similarity matrix
-    for i in range(len(sentences)):
-      for j in range(len(sentences)):
-        similarity[i,j] = cosine_similarity(context_vectors[i],context_vectors[j])
+  model.batch_size = 1  # We decode one sentence at a time.
+
+  # Get all of the context vectors
+  context_vectors = []
+  for sentence in sentences:
+    context_vector = get_context(sess,model,en_vocab,sentence)
+    context_vectors.append(context_vector)
+
+  # Calculate the similarity matrix
+  for i in range(len(sentences)):
+    for j in range(len(sentences)):
+      similarity[i,j] = cosine_similarity(context_vectors[i],context_vectors[j])
 
   # Dislay the output
   print(80*"=")
@@ -187,6 +184,9 @@ def comparison_task():
   print("The similarity matrix is:\n")
   print(similarity,"\n")
   print(80*"=")
+
+  # Reset the model
+  model.batch_size = original_batch_size
 
 
 
@@ -292,7 +292,7 @@ def train():
         sys.stdout.flush()
 
         # Run the comparison task on our simple sentences
-        comparison_task()
+        comparison_task(sess,model)
 
 
 
