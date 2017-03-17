@@ -122,16 +122,16 @@ def main():
 	# @labels is a column of labels
 	# @inputs is a column of similarity values for each training example
 	labels = np.zeros((len(pairs),1))
-	inputs = np.zeros((len(pairs),8))
+	inputs = np.zeros((len(pairs),14))
 
 	for i,pair in enumerate(pairs):
 		sentence1,sentence2,label = pair
 		labels[i] = label
-		#inputs[i,0:2] = get_glove_similarity(sentence1,sentence2)
-		#inputs[i,2:4] = get_doc2vec_similarity(sentence1,sentence2)
-		#inputs[i,4:6] = get_translator_similarity(sentence1,sentence2)
-		inputs[i,0:6] = get_feats(tokenized[sentence1][0], tokenized[sentence2][0])
-		inputs[i,6:8] = get_skipthought_similarity(sentence1,sentence2)
+		inputs[i,0:2] = get_glove_similarity(sentence1,sentence2)
+		inputs[i,2:4] = get_doc2vec_similarity(sentence1,sentence2)
+		inputs[i,4:6] = get_translator_similarity(sentence1,sentence2)
+		inputs[i,6:12] = get_feats(tokenized[sentence1][0], tokenized[sentence2][0])
+		inputs[i,12:14] = get_skipthought_similarity(sentence1,sentence2)
 
 	# Our last chance to drop any of the inputs
 	# inputs = inputs[:,4:6]

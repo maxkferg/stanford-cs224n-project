@@ -1,6 +1,5 @@
 
 *.warc
-*.xlsx
 *.pyc
 *.json
 
@@ -20,7 +19,7 @@ glove/data/msrdata/*
 translator/pickle
 translator/data/checkpoints/*
 translator/data/vocab/*
-translator/data/msrdata/*
+# translator/data/msrdata/*
 
 skip-thoughts-master
 skipthought-max
