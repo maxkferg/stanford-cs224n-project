@@ -43,7 +43,7 @@ import logging
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 from sklearn.metrics.pairwise import cosine_similarity
-from utils import _buckets,get_context
+from utils import _buckets,get_context,get_bucket
 import tensorflow as tf
 
 from lib import data_utils
