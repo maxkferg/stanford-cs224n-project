@@ -1,5 +1,5 @@
 import tensorflow as tf
-from data.parsers import MAX_LENGTH
+from data.parsers import MAX_SENTENCE_LENGTH
 
 def get_row_counts(A):
     """Return the number nonzero elements in each row"""
@@ -31,7 +31,7 @@ class BagOfVectorsEncoder(object):
         with tf.variable_scope("embeddings"):
             embedding_tensor = tf.Variable(self.pretrained_embeddings,dtype=tf.float32)
             features = tf.nn.embedding_lookup(embedding_tensor, tokens)
-            newshape = (-1, MAX_LENGTH, self.config.embed_size)
+            newshape = (-1, MAX_SENTENCE_LENGTH, self.config.embed_size)
             embeddings = tf.reshape(features, newshape)
         return embeddings
 

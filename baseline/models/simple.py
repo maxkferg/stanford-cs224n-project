@@ -9,7 +9,7 @@ from data.loaders import MicrosoftDataloader
 from encoders.simple import BagOfVectorsEncoder
 from utils.general_utils import Progbar,get_minibatches
 from sklearn.metrics import precision_recall_fscore_support,confusion_matrix
-from data.parsers import MAX_LENGTH
+from data.parsers import MAX_SENTENCE_LENGTH
 
 
 
@@ -23,7 +23,7 @@ class ClassifierConfig(object):
     gamma = 0
     dropout = 0.8
     n_classes = 1
-    max_length = MAX_LENGTH
+    max_length = MAX_SENTENCE_LENGTH
     embed_size = 50
     hidden_size = 20
     batch_size = 128
@@ -40,7 +40,7 @@ class EncoderConfig(object):
     instantiation.
     """
     n_classes = 1
-    max_length = MAX_LENGTH
+    max_length = MAX_SENTENCE_LENGTH
     embed_size = 50
     hidden_size = 300
     batch_size = 32

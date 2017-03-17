@@ -1,12 +1,26 @@
 
+*.warc
+*.xlsx
 *.pyc
+*.json
 
-data/glove/glove.6B/glove.6B.200d.txt
+doc2vec/pickle
+doc2vec/data/crawls/*
+doc2vec/data/msrdata/*
 
-data/glove/glove.6B/glove.6B.300d.txt
+baseline/pickle
+baseline/data/weights/*
+baseline/data/msrdata/*
 
-data/glove/glove.6B/glove.6B.100d.txt
 
-lib/recurrentshop/
+glove/pickle
+glove/data/glove/*
+glove/data/msrdata/*
 
-data/glove/glove.6B/glove.6B.50d.txt
+translator/pickle
+translator/data/checkpoints/*
+translator/data/vocab/*
+translator/data/msrdata/*
+
+skip-thoughts-master
+skipthought-max
