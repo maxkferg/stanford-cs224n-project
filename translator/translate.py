@@ -146,10 +146,10 @@ def comparison_task(sess,model=None):
   Cosine similarity is used as the distance metric
   """
   sentences = [
-    "There was a man with a red hat"
-    "There was a man with a blue hat"
-    "A man with a blue hat was there"
-    "The sky is blue and the grass is green"
+    "There was a man with a red hat",
+    "There was a man with a blue hat",
+    "A man with a blue hat was there",
+    "The sky is blue and the grass is green",
     "Why are you asking about the history of my life"
   ]
   # Load the vocab
