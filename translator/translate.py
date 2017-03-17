@@ -43,7 +43,7 @@ import logging
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 from sklearn.metrics.pairwise import cosine_similarity
-from utils import _buckets
+from utils import _buckets,get_context
 import tensorflow as tf
 
 from lib import data_utils
@@ -161,7 +161,7 @@ def comparison_task(sess,model=None):
     model = create_model(sess, True)
 
   # Persist the original batch size
-  original_batch_size = model.bath_size     
+  original_batch_size = model.batch_size     
 
   model.batch_size = 1  # We decode one sentence at a time.
 
@@ -172,6 +172,7 @@ def comparison_task(sess,model=None):
     context_vectors.append(context_vector)
 
   # Calculate the similarity matrix
+  similarity = np.zeros((len(sentences),len(sentences)))
   for i in range(len(sentences)):
     for j in range(len(sentences)):
       similarity[i,j] = cosine_similarity(context_vectors[i],context_vectors[j])
@@ -179,7 +180,7 @@ def comparison_task(sess,model=None):
   # Dislay the output
   print(80*"=")
   print("For the following sentences:\n")
-  for i,sentence in sentences:
+  for i,sentence in enumerate(sentences):
     print(i,sentence)
   print("The similarity matrix is:\n")
   print(similarity,"\n")
