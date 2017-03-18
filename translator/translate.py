@@ -378,15 +378,7 @@ def interactive_comparison():
       token_ids = data_utils.sentence_to_token_ids(tf.compat.as_bytes(sentence), en_vocab)
       print("tokenids:",token_ids)
       # Which bucket does it belong to?
-      bucket_id = len(_buckets) - 1
-      for i, bucket in enumerate(_buckets):
-        if bucket[0] >= len(token_ids):
-          bucket_id = i
-          break
-      else:
-        logging.warning("Sentence truncated: %s", sentence)
-
-      # Print the bucket id
+      bucket_id = get_bucket(en_vocab,sentence)
 
       # Get a 1-element batch to feed the sentence to the model.
       encoder_inputs, decoder_inputs, target_weights = model.get_batch({bucket_id: [(token_ids, [])]}, bucket_id)
@@ -403,9 +395,9 @@ def interactive_comparison():
 
       # Now we compute similarity metrics
       if len(contexts)==2:
-          cosine_distance = cosine(*contexts)
+          cosine_distance = cosine_similarity(*contexts)
           euclid_distance = np.linalg.norm(contexts[1]-contexts[0])
-          print('cosine_distance',cosine_distance)
+          print('cosine_similarity',cosine_distance)
           print('euclid_distance',euclid_distance)
           print('-------------------------------')
           contexts = []
